@@ -14,7 +14,7 @@ import com.location.api.exception.TwoDimensionalTrilaterationException;
 import com.location.api.model.Point2D;
 
 @SpringBootTest
-public class TestLocatorService {
+class TestLocatorService {
 
 	@MockBean
 	TwoDimensionalTrilaterationCalculator twoDimensionalTrilaterationCalculator;
@@ -23,7 +23,7 @@ public class TestLocatorService {
 	LocatorService locatorService;
 
 	@Test
-	public void testCallToTwoDimensionalTrilaterationCalculator() throws TwoDimensionalTrilaterationException {
+	void testCallToTwoDimensionalTrilaterationCalculator() throws TwoDimensionalTrilaterationException {
 		Point2D p1 = new Point2D(50, 0);
 		Point2D p2 = new Point2D(150, -25);
 		Point2D p3 = new Point2D(250, 14);
