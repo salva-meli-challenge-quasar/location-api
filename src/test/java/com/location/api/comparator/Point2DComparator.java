@@ -1,4 +1,4 @@
-package com.location.comparator;
+package com.location.api.comparator;
 
 import java.math.BigDecimal;
 
@@ -9,14 +9,14 @@ public class Point2DComparator {
 	public static boolean AreEquals(Point2D firstPoint, Point2D secondPoint) {
 		if (firstPoint == secondPoint)
 			return true;
-		if (roundDoubleToTwoDecimals(firstPoint.getX()) != roundDoubleToTwoDecimals(secondPoint.getX()))
+		if (roundDoubleToOneDecimals(firstPoint.getX()) != roundDoubleToOneDecimals(secondPoint.getX()))
 			return false;
-		if (roundDoubleToTwoDecimals(firstPoint.getY()) != roundDoubleToTwoDecimals(secondPoint.getY()))
+		if (roundDoubleToOneDecimals(firstPoint.getY()) != roundDoubleToOneDecimals(secondPoint.getY()))
 			return false;
 		return true;
 	}
 
-	private static double roundDoubleToTwoDecimals(double value) {
+	private static double roundDoubleToOneDecimals(double value) {
 		return BigDecimal.valueOf(value).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 }

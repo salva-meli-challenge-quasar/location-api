@@ -1,4 +1,4 @@
-package com.location.service;
+package com.location.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,14 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.location.api.comparator.Point2DComparator;
 import com.location.api.exception.CircleInsideAnotherException;
 import com.location.api.exception.CirclesDoNotIntersectException;
 import com.location.api.exception.CirclesMatchException;
 import com.location.api.exception.CollinearityException;
 import com.location.api.exception.TwoDimensionalTrilaterationException;
 import com.location.api.model.Point2D;
-import com.location.api.service.LocatorService;
-import com.location.comparator.Point2DComparator;
 
 @SpringBootTest
 class TestLocatorService {
