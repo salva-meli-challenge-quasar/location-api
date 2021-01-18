@@ -3,6 +3,7 @@ package com.location.api.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.location.api.exception.CircleInsideAnotherException;
@@ -15,7 +16,8 @@ import com.location.api.model.Point2D;
 @Service
 public class TwoDimensionalTrilaterationCalculator {
 
-	private static final double ERROR_BOUND = 0.00001;
+	@Value("${two.dimensional.trilateration.calculator.error.bound}")
+	private double errorBound;
 
 	public Point2D calculate(Point2D p1, Point2D p2, Point2D p3, double d1, double d2, double d3) throws TwoDimensionalTrilaterationException {
 		validateData(p1, p2, p3, d1, d2, d3);
@@ -26,7 +28,7 @@ public class TwoDimensionalTrilaterationCalculator {
 				calculateMiddlePoint(p1, p2, distanceP1P2, a), height, distanceP1P2);
 		validateCollinearityAndPosibleSolutions(p1, p2, p3, posibleSolutions);
 		for (Point2D posibleSolution : posibleSolutions) {
-			if (Math.abs(calculateDistanceBetweenPoints(posibleSolution, p3) - d3) < ERROR_BOUND) {
+			if (Math.abs(calculateDistanceBetweenPoints(posibleSolution, p3) - d3) < errorBound) {
 				return posibleSolution;
 			}
 		}
@@ -36,8 +38,8 @@ public class TwoDimensionalTrilaterationCalculator {
 	private void validateCollinearityAndPosibleSolutions(Point2D p1, Point2D p2, Point2D p3,
 			List<Point2D> posibleSolutions) throws TwoDimensionalTrilaterationException {
 		if (areCollinear(p1, p2, p3) && posibleSolutions.size() == 2
-				&& (Math.abs(posibleSolutions.get(0).getX() - posibleSolutions.get(1).getX()) > ERROR_BOUND
-						|| Math.abs(posibleSolutions.get(0).getY() - posibleSolutions.get(1).getY()) > ERROR_BOUND)) {
+				&& (Math.abs(posibleSolutions.get(0).getX() - posibleSolutions.get(1).getX()) > errorBound
+						|| Math.abs(posibleSolutions.get(0).getY() - posibleSolutions.get(1).getY()) > errorBound)) {
 			throw new CollinearityException(
 					"The three points are collinear: The circles formed with them and the distances intersect at more than one point");
 		}
