@@ -1,8 +1,12 @@
 package com.location.api.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,8 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.location.api.calculator.TwoDimensionalTrilaterationCalculator;
 import com.location.api.comparator.Point2DComparator;
-import com.location.api.exception.TwoDimensionalTrilaterationException;
-import com.location.api.model.Point2D;
+import com.location.api.exception.NoSuchAlgorithmException;
+import com.quasar.api.core.model.Point2D;
 
 @SpringBootTest
 class TestLocatorService {
@@ -23,15 +27,25 @@ class TestLocatorService {
 	LocatorService locatorService;
 
 	@Test
-	void testCallToTwoDimensionalTrilaterationCalculator() throws TwoDimensionalTrilaterationException {
-		Point2D p1 = new Point2D(50, 0);
-		Point2D p2 = new Point2D(150, -25);
-		Point2D p3 = new Point2D(250, 14);
-		double d1 = 150;
-		double d2 = 177;
-		double d3 = 225;
+	void testCallToTwoDimensionalTrilaterationCalculator() throws Exception {
+		double[] distances = new double[] {150, 177, 225};
+		List<Point2D> points = new ArrayList<>();
+		points.add(new Point2D(50, 0));
+		points.add(new Point2D(150, -25));
+		points.add(new Point2D(250, 14));
 		Point2D expectedPoint = new Point2D(0, 0);
-		when(twoDimensionalTrilaterationCalculator.calculate(p1, p2, p3, d1, d2, d3)).thenReturn(expectedPoint);
-		assertTrue(Point2DComparator.AreEquals(expectedPoint, locatorService.getLocation(p1, p2, p3, d1, d2, d3)));
+		when(twoDimensionalTrilaterationCalculator.calculate(points, distances)).thenReturn(expectedPoint);
+		assertTrue(Point2DComparator.AreEquals(expectedPoint, locatorService.getLocation(points, distances)));
+	}
+	
+	@Test
+	void testInexistentAlgorithm() throws NoSuchAlgorithmException {
+		double[] distances = new double[] {40};
+		List<Point2D> points = new ArrayList<>();
+		points.add(new Point2D(0, 50));
+
+		assertThrows(NoSuchAlgorithmException.class, () -> {
+			locatorService.getLocation(points, distances);
+		});
 	}
 }
