@@ -1,7 +1,7 @@
 package com.location.api.controller;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Files;
 
@@ -13,7 +13,7 @@ import org.springframework.core.io.Resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.location.api.comparator.Point2DComparator;
-import com.location.api.exception.TwoDimensionalTrilaterationException;
+import com.location.api.exception.CircleInsideAnotherException;
 import com.quasar.api.core.model.Point2D;
 import com.quasar.api.core.request.LocationRequest;
 
@@ -36,7 +36,7 @@ class TestLocationController {
 		LocationRequest noSolutionRequestData = objectMapper.readValue(
 				new String(Files.readAllBytes(this.noSolutionRequestResource.getFile().toPath())),
 				LocationRequest.class);
-		assertThrows(TwoDimensionalTrilaterationException.class, () -> {
+		assertThrows(CircleInsideAnotherException.class, () -> {
 			locationController.locate(noSolutionRequestData);
 		});
 	}

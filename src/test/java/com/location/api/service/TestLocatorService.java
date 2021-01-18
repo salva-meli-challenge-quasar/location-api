@@ -43,7 +43,6 @@ class TestLocatorService {
 		double[] distances = new double[] {40};
 		List<Point2D> points = new ArrayList<>();
 		points.add(new Point2D(0, 50));
-
 		assertThrows(NoSuchAlgorithmException.class, () -> {
 			locatorService.getLocation(points, distances);
 		});
