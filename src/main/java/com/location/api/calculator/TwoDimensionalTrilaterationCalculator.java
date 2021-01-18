@@ -35,7 +35,7 @@ public class TwoDimensionalTrilaterationCalculator {
 	
 	private void validateCollinearityAndPosibleSolutions(Point2D p1, Point2D p2, Point2D p3,
 			List<Point2D> posibleSolutions) throws TwoDimensionalTrilaterationException {
-		if (areCollineal(p1, p2, p3) && posibleSolutions.size() == 2
+		if (areCollinear(p1, p2, p3) && posibleSolutions.size() == 2
 				&& (Math.abs(posibleSolutions.get(0).getX() - posibleSolutions.get(1).getX()) > ERROR_BOUND
 						|| Math.abs(posibleSolutions.get(0).getY() - posibleSolutions.get(1).getY()) > ERROR_BOUND)) {
 			throw new CollinearityException(
@@ -105,7 +105,7 @@ public class TwoDimensionalTrilaterationCalculator {
 		}
 	}
 
-	private boolean areCollineal(Point2D p1, Point2D p2, Point2D p3) {
+	private boolean areCollinear(Point2D p1, Point2D p2, Point2D p3) {
 		return p1.getX() * (p2.getY() - p3.getY()) + p2.getX() * (p3.getY() - p1.getY())
 				+ p3.getX() * (p1.getY() - p2.getY()) == 0;
 	}
