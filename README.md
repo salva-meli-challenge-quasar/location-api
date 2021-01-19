@@ -16,10 +16,10 @@ Las tecnologías que se utilizaron son:
 
 La API se encuentra hosteada en **heroku**, que es un servicio de hosting que brinda opciones para hostear APIs de manera gratuita. Para más información puede ingresar a www.heroku.com.
 
-**URL del servicio: https://salva-location-api.herokuapp.com/location**
+**URL del servicio: https://salva-location-api.herokuapp.com/locations**
 
 #### Llamadas provistas
-Realizando un POST a la URL https://salva-location-api.herokuapp.com/location se recibe como respuesta la ubicación del punto Pk.
+Realizando un POST a la URL https://salva-location-api.herokuapp.com/locations se recibe como respuesta la ubicación del punto Pk.
 
 #### Ejemplo del Body del POST
 
