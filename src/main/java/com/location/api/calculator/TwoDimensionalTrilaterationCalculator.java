@@ -43,7 +43,7 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 				return posibleSolution;
 			}
 		}
-		throw new MalformedDataException("No existe solucion para los datos enviados");
+		throw new MalformedDataException("Malformed data - there is not solution");
 	}
 
 	private void validateCollinearityAndPosibleSolutions(Point2D p1, Point2D p2, Point2D p3,
