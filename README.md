@@ -8,7 +8,7 @@ Esta API tiene como fin brindar el servicio para, a partir de 3 puntos (P1, P2, 
 
 ### Especificación
 
-### Tecnologías
+#### Tecnologías
 Las tecnologías que se utilizaron son:
 - Java 1.8
 - Maven
@@ -18,7 +18,7 @@ La API se encuentra hosteada en **heroku**, que es un servicio de hosting que br
 
 **URL del servicio: https://salva-location-api.herokuapp.com/location**
 
-### Llamadas provistas
+#### Llamadas provistas
 Realizando un POST a la URL https://salva-location-api.herokuapp.com/location se recibe como respuesta la ubicación del punto Pk.
 
 #### Ejemplo del Body del POST
@@ -57,11 +57,11 @@ Y el Response con código 200 y body:
 ```
 En caso de no poderse determinar la posición del punto Pk se retorna un response con mensaje de error y código 404.
 
-## Diagramas
+### Diagramas
 
-### Diagrama de Clases
+#### Diagrama de Clases
 ![diagrama de clases](src/main/resources/documentation/diagrams/class-diagram.png)
 
-### Diagrama de Secuencia
-#### Calculo de ubicación - flujo normal
+#### Diagrama de Secuencia
+##### Cálculo de ubicación - flujo normal
 ![diagrama de clases](src/main/resources/documentation/diagrams/calculate-location-happy-path.png)
