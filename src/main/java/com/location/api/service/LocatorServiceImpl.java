@@ -14,7 +14,7 @@ import com.quasar.api.core.model.Point2D;
 public class LocatorServiceImpl implements LocatorService {
 
 	@Autowired
-	CalculatorFactory calculatorFactory;
+	private CalculatorFactory calculatorFactory;
 
 	public Point2D getLocation(List<Point2D> points, double[] distances)
 			throws TwoDimensionalTrilaterationException, NoSuchAlgorithmException {

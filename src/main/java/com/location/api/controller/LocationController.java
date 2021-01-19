@@ -16,7 +16,7 @@ import com.quasar.api.core.response.LocationResponse;
 public class LocationController {
 
 	@Autowired
-	LocatorService locatorService;
+	private LocatorService locatorService;
 
 	@PostMapping(value = "/location", consumes = "application/json", produces = "application/json")
 	public LocationResponse locate(@RequestBody LocationRequest locationData)
