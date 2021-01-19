@@ -2,12 +2,9 @@ package com.location.api.controller;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
