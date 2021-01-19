@@ -10,6 +10,7 @@ import com.location.api.exception.CircleInsideAnotherException;
 import com.location.api.exception.CirclesDoNotIntersectException;
 import com.location.api.exception.CirclesMatchException;
 import com.location.api.exception.CollinearityException;
+import com.location.api.exception.MalformedDataException;
 import com.location.api.exception.TwoDimensionalTrilaterationException;
 import com.quasar.api.core.model.Point2D;
 
@@ -24,7 +25,7 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 	private static final int P3_INDEX = 2;
 
 	@Override
-	public Point2D calculate(List<Point2D> points, double[] distances) throws TwoDimensionalTrilaterationException {
+	public Point2D calculate(List<Point2D> points, double[] distances) throws TwoDimensionalTrilaterationException, MalformedDataException {
 		validateData(points.get(P1_INDEX), points.get(P2_INDEX), points.get(P3_INDEX), distances[P1_INDEX],
 				distances[P2_INDEX], distances[P3_INDEX]);
 		double distanceP1P2 = calculateDistanceBetweenPoints(points.get(P1_INDEX), points.get(P2_INDEX));
@@ -42,7 +43,7 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 				return posibleSolution;
 			}
 		}
-		return null;
+		throw new MalformedDataException("No existe solucion para los datos enviados");
 	}
 
 	private void validateCollinearityAndPosibleSolutions(Point2D p1, Point2D p2, Point2D p3,

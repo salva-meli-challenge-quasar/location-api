@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.location.api.comparator.Point2DComparator;
 import com.location.api.exception.CircleInsideAnotherException;
+import com.location.api.exception.MalformedDataException;
 import com.location.api.exception.NoSuchAlgorithmException;
 import com.location.api.exception.TwoDimensionalTrilaterationException;
 import com.quasar.api.core.model.Point2D;
@@ -67,7 +68,7 @@ class TestLocationController {
 
 	@Test
 	void testSolutionRequest() throws TwoDimensionalTrilaterationException, NoSuchAlgorithmException,
-			JsonMappingException, JsonProcessingException, IOException {
+			JsonMappingException, JsonProcessingException, IOException, MalformedDataException {
 		LocationRequest validSolutionRequestData = objectMapper.readValue(
 				new String(Files.readAllBytes(this.validSolutionRequestResource.getFile().toPath())),
 				LocationRequest.class);

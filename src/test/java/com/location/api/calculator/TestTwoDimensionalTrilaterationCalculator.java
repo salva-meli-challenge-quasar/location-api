@@ -15,6 +15,7 @@ import com.location.api.exception.CircleInsideAnotherException;
 import com.location.api.exception.CirclesDoNotIntersectException;
 import com.location.api.exception.CirclesMatchException;
 import com.location.api.exception.CollinearityException;
+import com.location.api.exception.MalformedDataException;
 import com.location.api.exception.TwoDimensionalTrilaterationException;
 import com.quasar.api.core.model.Point2D;
 
@@ -25,7 +26,7 @@ class TestTwoDimensionalTrilaterationCalculator {
 	TwoDimensionalTrilaterationCalculator twoDimensionalTrilaterationCalculator;
 
 	@Test
-	void testTwoAlignedPointsOnYAxis() throws TwoDimensionalTrilaterationException {
+	void testTwoAlignedPointsOnYAxis() throws TwoDimensionalTrilaterationException, MalformedDataException {
 		double[] distances = new double[] {250, 400, 632.455532};
 		List<Point2D> points = new ArrayList<>();
 		points.add(new Point2D(50, 0));
@@ -36,7 +37,7 @@ class TestTwoDimensionalTrilaterationCalculator {
 	}
 
 	@Test
-	void testThreeAlignedPointsOnYAxisAndIntersectsInOnePoint() throws TwoDimensionalTrilaterationException {
+	void testThreeAlignedPointsOnYAxisAndIntersectsInOnePoint() throws TwoDimensionalTrilaterationException, MalformedDataException {
 		double[] distances = new double[] {250, 400, 600};
 		List<Point2D> points = new ArrayList<>();
 		points.add(new Point2D(50, 0));
@@ -48,7 +49,7 @@ class TestTwoDimensionalTrilaterationCalculator {
 	}
 
 	@Test
-	void testTwoAlignedPointsOnXAxis() throws TwoDimensionalTrilaterationException {
+	void testTwoAlignedPointsOnXAxis() throws TwoDimensionalTrilaterationException, MalformedDataException {
 		double[] distances = new double[] {318.2766093, 358.8875172, 670.8203932};
 		List<Point2D> points = new ArrayList<>();
 		points.add(new Point2D(30, 120));
@@ -115,6 +116,18 @@ class TestTwoDimensionalTrilaterationCalculator {
 		points.add(new Point2D(0, 50));
 		points.add(new Point2D(25, 500));
 		assertThrows(CirclesMatchException.class, () -> {
+				twoDimensionalTrilaterationCalculator.calculate(points, distances);
+		});
+	}
+	
+	@Test
+	void testNoSolutionData() {
+		double[] distances = new double[] {250, 400, 632.455532};
+		List<Point2D> points = new ArrayList<>();
+		points.add(new Point2D(0, 0));
+		points.add(new Point2D(200, 0));
+		points.add(new Point2D(400, 200));
+		assertThrows(MalformedDataException.class, () -> {
 				twoDimensionalTrilaterationCalculator.calculate(points, distances);
 		});
 	}

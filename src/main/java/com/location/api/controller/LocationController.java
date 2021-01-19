@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.location.api.exception.MalformedDataException;
 import com.location.api.exception.NoSuchAlgorithmException;
 import com.location.api.exception.TwoDimensionalTrilaterationException;
 import com.location.api.service.LocatorService;
@@ -21,7 +22,7 @@ public class LocationController {
 
 	@PostMapping(value = "/locations", consumes = "application/json", produces = "application/json")
 	public LocationResponse locate(@Valid @RequestBody LocationRequest locationRequest)
-			throws TwoDimensionalTrilaterationException, NoSuchAlgorithmException {
+			throws TwoDimensionalTrilaterationException, NoSuchAlgorithmException, MalformedDataException {
 		return new LocationResponse(locatorService.getLocation(locationRequest.getPoints(), 
 				locationRequest.getDistances()));
 	}
