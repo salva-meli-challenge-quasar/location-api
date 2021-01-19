@@ -11,30 +11,40 @@ import com.location.api.exception.CirclesDoNotIntersectException;
 import com.location.api.exception.CirclesMatchException;
 import com.location.api.exception.CollinearityException;
 import com.location.api.exception.TwoDimensionalTrilaterationException;
-import com.location.api.model.Point2D;
+import com.quasar.api.core.model.Point2D;
 
 @Service
-public class TwoDimensionalTrilaterationCalculator {
+public class TwoDimensionalTrilaterationCalculator implements LocationCalculator {
 
 	@Value("${two.dimensional.trilateration.calculator.error.bound}")
 	private double errorBound;
 
-	public Point2D calculate(Point2D p1, Point2D p2, Point2D p3, double d1, double d2, double d3) throws TwoDimensionalTrilaterationException {
-		validateData(p1, p2, p3, d1, d2, d3);
-		double distanceP1P2 = calculateDistanceBetweenPoints(p1, p2);
-		double a = (Math.pow(d1, 2) - Math.pow(d2, 2) + Math.pow(distanceP1P2, 2)) / (2 * distanceP1P2);
-		double height = calculateTriangleHeight(d1, a);
-		List<Point2D> posibleSolutions = calculatePosibleSolutions(p1, p2,
-				calculateMiddlePoint(p1, p2, distanceP1P2, a), height, distanceP1P2);
-		validateCollinearityAndPosibleSolutions(p1, p2, p3, posibleSolutions);
+	private static final int P1_INDEX = 0;
+	private static final int P2_INDEX = 1;
+	private static final int P3_INDEX = 2;
+
+	@Override
+	public Point2D calculate(List<Point2D> points, double[] distances) throws TwoDimensionalTrilaterationException {
+		validateData(points.get(P1_INDEX), points.get(P2_INDEX), points.get(P3_INDEX), distances[P1_INDEX],
+				distances[P2_INDEX], distances[P3_INDEX]);
+		double distanceP1P2 = calculateDistanceBetweenPoints(points.get(P1_INDEX), points.get(P2_INDEX));
+		double a = (Math.pow(distances[P1_INDEX], 2) - Math.pow(distances[P2_INDEX], 2) + Math.pow(distanceP1P2, 2))
+				/ (2 * distanceP1P2);
+		double height = calculateTriangleHeight(distances[P1_INDEX], a);
+		List<Point2D> posibleSolutions = calculatePosibleSolutions(points.get(P1_INDEX), points.get(P2_INDEX),
+				calculateMiddlePoint(points.get(P1_INDEX), points.get(P2_INDEX), distanceP1P2, a), height,
+				distanceP1P2);
+		validateCollinearityAndPosibleSolutions(points.get(P1_INDEX), points.get(P2_INDEX), points.get(P3_INDEX),
+				posibleSolutions);
 		for (Point2D posibleSolution : posibleSolutions) {
-			if (Math.abs(calculateDistanceBetweenPoints(posibleSolution, p3) - d3) < errorBound) {
+			if (Math.abs(calculateDistanceBetweenPoints(posibleSolution, points.get(P3_INDEX))
+					- distances[P3_INDEX]) < errorBound) {
 				return posibleSolution;
 			}
 		}
 		return null;
 	}
-	
+
 	private void validateCollinearityAndPosibleSolutions(Point2D p1, Point2D p2, Point2D p3,
 			List<Point2D> posibleSolutions) throws TwoDimensionalTrilaterationException {
 		if (areCollinear(p1, p2, p3) && posibleSolutions.size() == 2
@@ -46,7 +56,7 @@ public class TwoDimensionalTrilaterationCalculator {
 	}
 
 	private Point2D calculateMiddlePoint(Point2D p1, Point2D p2, double distanceP1P2, double a) {
-		return new Point2D(p1.getX() + a * (p2.getX() - p1.getX()) / distanceP1P2, 
+		return new Point2D(p1.getX() + a * (p2.getX() - p1.getX()) / distanceP1P2,
 				p1.getY() + a * (p2.getY() - p1.getY()) / distanceP1P2);
 	}
 
@@ -92,8 +102,8 @@ public class TwoDimensionalTrilaterationCalculator {
 	}
 
 	private void validateCirclesDontMatch(Point2D p1, Point2D p2, Point2D p3) throws CirclesMatchException {
-		if(calculateDistanceBetweenPoints(p1, p2) == 0 || calculateDistanceBetweenPoints(p1, p3) == 0 ||
-				calculateDistanceBetweenPoints(p2, p3) == 0) {
+		if (calculateDistanceBetweenPoints(p1, p2) == 0 || calculateDistanceBetweenPoints(p1, p3) == 0
+				|| calculateDistanceBetweenPoints(p2, p3) == 0) {
 			throw new CirclesMatchException("At least two circles match, intersecting at infinite points");
 		}
 	}
@@ -103,7 +113,8 @@ public class TwoDimensionalTrilaterationCalculator {
 		if (calculateDistanceBetweenPoints(p1, p2) < Math.abs(d1 - d2)
 				|| calculateDistanceBetweenPoints(p1, p3) < Math.abs(d1 - d3)
 				|| calculateDistanceBetweenPoints(p2, p3) < Math.abs(d2 - d3)) {
-			throw new CircleInsideAnotherException("At least a circle formed by a point and its distance is within another circle");
+			throw new CircleInsideAnotherException(
+					"At least a circle formed by a point and its distance is within another circle");
 		}
 	}
 

@@ -2,7 +2,7 @@ package com.location.api.comparator;
 
 import java.math.BigDecimal;
 
-import com.location.api.model.Point2D;
+import com.quasar.api.core.model.Point2D;
 
 public class Point2DComparator {
 

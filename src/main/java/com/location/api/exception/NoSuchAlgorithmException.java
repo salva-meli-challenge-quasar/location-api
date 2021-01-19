@@ -4,9 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class TwoDimensionalTrilaterationException extends Exception {
+public class NoSuchAlgorithmException extends Exception {
 
-	public TwoDimensionalTrilaterationException(String message) {
+	public NoSuchAlgorithmException(String message) {
 		super(message);
 	}
+	
 }

@@ -1,10 +1,14 @@
 package com.location.api.service;
 
+import java.util.List;
+
+import com.location.api.exception.NoSuchAlgorithmException;
 import com.location.api.exception.TwoDimensionalTrilaterationException;
-import com.location.api.model.Point2D;
+import com.quasar.api.core.model.Point2D;
 
 public interface LocatorService {
 
-	Point2D getLocation(Point2D p1, Point2D p2, Point2D p3, double d1, double d2, double d3)
-			throws TwoDimensionalTrilaterationException;
+	Point2D getLocation(List<Point2D> points, double[] distances)
+			throws TwoDimensionalTrilaterationException, NoSuchAlgorithmException;
+
 }
