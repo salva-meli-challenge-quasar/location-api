@@ -88,12 +88,19 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 	}
 
 	private void validateData(Point2D p1, Point2D p2, Point2D p3, double d1, double d2, double d3)
-			throws TwoDimensionalTrilaterationException {
+			throws TwoDimensionalTrilaterationException, MalformedDataException {
+		validateDistances(d1, d2, d3);
 		validateCirclesNotContainAnother(p1, p2, p3, d1, d2, d3);
 		validateCirclesDontMatch(p1, p2, p3);
 		validateCirclesIntersect(p1, p2, p3, d1, d2, d3);
 	}
 
+	private void validateDistances(double d1, double d2, double d3) throws MalformedDataException {
+		if(d1 < 0.0 || d2 < 0.0 || d3 < 0.0) {
+			throw new MalformedDataException("At least one distance is negative");
+		}
+	}
+	
 	private void validateCirclesIntersect(Point2D p1, Point2D p2, Point2D p3, double d1, double d2, double d3)
 			throws CirclesDoNotIntersectException {
 		if (calculateDistanceBetweenPoints(p1, p2) > d1 + d2 || calculateDistanceBetweenPoints(p1, p3) > d1 + d3
