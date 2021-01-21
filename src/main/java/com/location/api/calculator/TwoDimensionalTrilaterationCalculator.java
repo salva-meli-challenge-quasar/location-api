@@ -3,6 +3,8 @@ package com.location.api.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 	private static final int P2_INDEX = 1;
 	private static final int P3_INDEX = 2;
 
+	private static final Logger logger = LogManager.getLogger(TwoDimensionalTrilaterationCalculator.class);
+
 	@Override
 	public Point2D calculate(List<Point2D> points, double[] distances) throws TwoDimensionalTrilaterationException, MalformedDataException {
 		validateData(points.get(P1_INDEX), points.get(P2_INDEX), points.get(P3_INDEX), distances[P1_INDEX],
@@ -40,9 +44,11 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 		for (Point2D posibleSolution : posibleSolutions) {
 			if (Math.abs(calculateDistanceBetweenPoints(posibleSolution, points.get(P3_INDEX))
 					- distances[P3_INDEX]) < errorBound) {
+				logger.debug("**** Position calculated ****");
 				return posibleSolution;
 			}
 		}
+		logger.debug("-- There is not solution --");
 		throw new MalformedDataException("Malformed data - there is not solution");
 	}
 
@@ -51,6 +57,7 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 		if (areCollinear(p1, p2, p3) && posibleSolutions.size() == 2
 				&& (Math.abs(posibleSolutions.get(0).getX() - posibleSolutions.get(1).getX()) > errorBound
 						|| Math.abs(posibleSolutions.get(0).getY() - posibleSolutions.get(1).getY()) > errorBound)) {
+			logger.error("-- The three points are collinear: The circles formed with them and the distances intersect at more than one point --");
 			throw new CollinearityException(
 					"The three points are collinear: The circles formed with them and the distances intersect at more than one point");
 		}
@@ -89,14 +96,17 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 
 	private void validateData(Point2D p1, Point2D p2, Point2D p3, double d1, double d2, double d3)
 			throws TwoDimensionalTrilaterationException, MalformedDataException {
+		logger.debug("** Validating data **");
 		validateDistances(d1, d2, d3);
 		validateCirclesNotContainAnother(p1, p2, p3, d1, d2, d3);
 		validateCirclesDontMatch(p1, p2, p3);
 		validateCirclesIntersect(p1, p2, p3, d1, d2, d3);
+		logger.debug("** Data OK **");
 	}
 
 	private void validateDistances(double d1, double d2, double d3) throws MalformedDataException {
 		if(d1 < 0.0 || d2 < 0.0 || d3 < 0.0) {
+			logger.error("-- At least one didstance is negative --");
 			throw new MalformedDataException("At least one distance is negative");
 		}
 	}
@@ -105,6 +115,7 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 			throws CirclesDoNotIntersectException {
 		if (calculateDistanceBetweenPoints(p1, p2) > d1 + d2 || calculateDistanceBetweenPoints(p1, p3) > d1 + d3
 				|| calculateDistanceBetweenPoints(p2, p3) > d2 + d3) {
+			logger.error("-- At least two circles do not intersect --");
 			throw new CirclesDoNotIntersectException("At least two circles do not intersect");
 		}
 	}
@@ -112,6 +123,7 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 	private void validateCirclesDontMatch(Point2D p1, Point2D p2, Point2D p3) throws CirclesMatchException {
 		if (calculateDistanceBetweenPoints(p1, p2) == 0 || calculateDistanceBetweenPoints(p1, p3) == 0
 				|| calculateDistanceBetweenPoints(p2, p3) == 0) {
+			logger.error("-- At least two circles match, intersecting at infinite points --");
 			throw new CirclesMatchException("At least two circles match, intersecting at infinite points");
 		}
 	}
@@ -121,6 +133,7 @@ public class TwoDimensionalTrilaterationCalculator implements LocationCalculator
 		if (calculateDistanceBetweenPoints(p1, p2) < Math.abs(d1 - d2)
 				|| calculateDistanceBetweenPoints(p1, p3) < Math.abs(d1 - d3)
 				|| calculateDistanceBetweenPoints(p2, p3) < Math.abs(d2 - d3)) {
+			logger.error("At least a circle formed by a point and its distance is within another circle");
 			throw new CircleInsideAnotherException(
 					"At least a circle formed by a point and its distance is within another circle");
 		}
